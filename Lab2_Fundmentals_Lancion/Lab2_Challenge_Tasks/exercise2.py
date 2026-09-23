@@ -1,65 +1,74 @@
-import random
+LAST_NAME = "LANCION"
+SEED_NUM = 5
 
-surname = "Lancion"
-SEED_NUM = 5  
 
-random.seed(SEED_NUM + sum(ord(c) for c in surname))
+def generate_signal():
+    return f"{LAST_NAME}-{SEED_NUM} Signal 2026!"
 
-characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 !@#"
-signal = "".join(random.choice(characters) for _ in range(15))
 
-print("=== SIGNAL DIAGNOSTIC SYSTEM ===")
-print("Generated Signal:", repr(signal))
+def normalize_signal(signal):
+    return signal.strip().upper()
 
-# Normalize the signal
-processed_signal = signal.strip().upper()
 
-print("Processed Signal:", repr(processed_signal))
+def analyze_signal(signal):
+    letters = 0
+    numbers = 0
+    spaces = 0
+    special = 0
 
-letters = 0
-numbers = 0
-spaces = 0
-special = 0
+    print("\nCharacter Analysis:")
 
-print("\nCharacter Analysis:")
+    for char in signal:
+        if char.isalpha():
+            category = "Letter"
+            letters += 1
+        elif char.isdigit():
+            category = "Number"
+            numbers += 1
+        elif char.isspace():
+            category = "Space"
+            spaces += 1
+        else:
+            category = "Special Character"
+            special += 1
 
-for char in processed_signal:
-    if char.isalpha():
-        category = "LETTER"
-        letters += 1
-    elif char.isdigit():
-        category = "NUMBER"
-        numbers += 1
-    elif char.isspace():
-        category = "SPACE"
-        spaces += 1
+        print(f"'{char}' -> {category}")
+
+    return letters, numbers, spaces, special
+
+
+def classify_signal(letters, numbers, spaces, special):
+    if special > 0 and numbers > 0:
+        return "COMPLEX SIGNAL"
+    elif letters > numbers:
+        return "TEXT-DOMINANT SIGNAL"
+    elif numbers > letters:
+        return "NUMBER-DOMINANT SIGNAL"
     else:
-        category = "SPECIAL CHARACTER"
-        special += 1
+        return "BALANCED SIGNAL"
 
-    print(f"{repr(char)} -> {category}")
 
-total = len(processed_signal)
+def main():
+    signal = generate_signal()
+    normalized = normalize_signal(signal)
 
-if letters > numbers and letters > special:
-    classification = "ALPHABETIC-DOMINANT"
-elif numbers > letters and numbers > special:
-    classification = "NUMERIC-DOMINANT"
-else:
-    classification = "MIXED SIGNAL"
+    print("=== SIGNAL DIAGNOSTIC SYSTEM ===")
+    print(f"Generated Signal: {signal}")
+    print(f"Normalized Signal: {normalized}")
 
-print("\n=== DIAGNOSTIC REPORT ===")
-print("Letters:", letters)
-print("Numbers:", numbers)
-print("Spaces:", spaces)
-print("Special Characters:", special)
-print("Signal Classification:", classification)
+    letters, numbers, spaces, special = analyze_signal(normalized)
 
-print("\nExecution Log:")
-print("Signal generated.")
-print("Signal normalized.")
-print("Signal analyzed character by character.")
+    classification = classify_signal(
+        letters, numbers, spaces, special
+    )
 
-print("\nFinal Output:")
-print("Signal analysis completed successfully.")
-print("Classification:", classification)
+    print("\n=== DIAGNOSTIC REPORT ===")
+    print(f"Letters: {letters}")
+    print(f"Numbers: {numbers}")
+    print(f"Spaces: {spaces}")
+    print(f"Special Characters: {special}")
+    print(f"Final Classification: {classification}")
+
+
+if __name__ == "__main__":
+    main()
